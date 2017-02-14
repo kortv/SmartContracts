@@ -1,35 +1,16 @@
-pragma solidity ^0.4.4;
+pragma solidity ^0.4.8;
 
-import "./Owned.sol"; 
-import "./EternalStorage.sol";
+import "./UserLibrary.sol";
+import "./Managed.sol";
 
-contract Configurable is Owned {
-  enum Setting {name,website,controller,issueLimit,issued,redeemed,publishedHash,expDate,timeProxyContract,rewardsContract,exchangeContract,proxyContract,securityPercentage,liquidityPercentage,insurancePercentage,insuranceDuration,lhProxyContract}
-  enum Status {maintenance, active, suspended, bankrupt}
-  string[20] internal settings;
-  uint[20] internal values;
-  address[20] internal contracts;
-
+contract Configurable is Managed {
   address public eternalStorage;
 
-  function setStorage(address _eternalStorage) {
-    eternalStorage = _eternalStorage;
-  }
+    function getSenderUserId() returns(uint) {
+        return UserLibrary.getUserId(eternalStorage, msg.sender);
+    }
 
-  function getValue(uint name) constant returns(uint) {
-    return values[name];
-  }
-
-  function getString(uint name) constant returns(string) {
-    return settings[name];
-  }
-
-  function setString(uint name, string value) onlyContractOwner {
-    settings[name] = value;
-  }
-
-  function setValue(uint name, uint value) onlyContractOwner {
-    values[name] = value;
-  }
-
+    function getConfig(bytes32 key) constant returns(uint) {
+        return EternalStorage(eternalStorage).getUIntValue(sha3("config/", key));
+    }
 }

@@ -1,44 +1,26 @@
-pragma solidity ^0.4.4;
+pragma solidity ^0.4.8;
 
-import "./Configurable.sol";
 import "./Shareable.sol";
+import "./UserLibrary.sol";
 
-contract Managed is Configurable, Shareable {
+contract Managed is Shareable {
 
-  enum Operations {createLOC,editLOC,addLOC,removeLOC,editMint,changeReq}
   mapping (bytes32 => Transaction) txs;
-  string[20] memberNames;
-  uint public numAuthorizedKeys = 1;
 
   struct Transaction {
     address to;
     bytes data;
-    Operations op;
-  }
-
-  function setMemberName(address key, string _name) onlyAuthorized() returns(bool) {
-     memberNames[ownerIndex[uint(key)]] = _name;
-     return true;
-  }
-
-  function getMemberName(address key) constant returns(string) {
-     return memberNames[ownerIndex[uint(key)]];
   }
 
   function Managed() {
-    address owner  = msg.sender;
-    owners[numAuthorizedKeys] = uint(owner);
-    ownerIndex[uint(owner)] = numAuthorizedKeys;
-    numAuthorizedKeys++;
-    required = 1;
   }
 
-  function getTxsType(bytes32 _hash) returns (uint) {
-    return uint(txs[_hash].op);
-  }
+  //function getTxsType(bytes32 _hash) returns (uint) {
+  //  return uint(txs[_hash].op);
+ // }
 
-  function setRequired(uint _required) execute(Operations.changeReq) {
-    if(_required > 1 && numAuthorizedKeys < _required) {
+  function setRequired(uint _required) execute() {
+    if(_required > 1) {
       required = _required; 
     }
   }
@@ -49,12 +31,12 @@ contract Managed is Configurable, Shareable {
       }
   }
 
-  modifier execute(Operations _type) {
+  modifier execute() {
    if (required > 1) {
    if (this != msg.sender) {
       bytes32 _r = sha3(msg.data,"signature");
       txs[_r].data = msg.data;
-      txs[_r].op = _type;
+     // txs[_r].op = _type;
       txs[_r].to = this;
       confirm(_r);
     } 
@@ -84,39 +66,4 @@ contract Managed is Configurable, Shareable {
       return false;
   } 
  
-  function addKey(address key) execute(Operations.createLOC) {
-    if (ownerIndex[uint(key)] == uint(0x0)) { // Make sure that the key being submitted isn't already CBE.
-      owners[numAuthorizedKeys] = uint(key);        
-      ownerIndex[uint(key)] = numAuthorizedKeys;
-      numAuthorizedKeys++;
-      if(numAuthorizedKeys > 2)
-       {
-         required++;
-       }
-    }
-  }
-
-  function revokeKey(address key) execute(Operations.createLOC) {
-    if (ownerIndex[uint(key)] != uint(0x0)) { // Make sure that the key being submitted isn't already CBE.
-      remove(ownerIndex[uint(key)]);
-      delete ownerIndex[uint(key)];
-      numAuthorizedKeys--;
-      if(numAuthorizedKeys >= 2)
-       {
-         required--;
-       }
-    }
-  }
-
- function remove(uint index){
-        if (index >= owners.length) return;
-
-        for (uint i = index; i<owners.length-1; i++){
-            owners[i] = owners[i+1];
-            memberNames[i] = memberNames[i+1];
-        }
-        delete owners[owners.length-1];
-    }
-
-
 }

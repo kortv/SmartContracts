@@ -1,5 +1,4 @@
-pragma solidity ^0.4.4;
-
+pragma solidity ^0.4.8;
 
 /*
  * Shareable
@@ -62,6 +61,17 @@ contract Shareable {
 
 
   // METHODS
+  function pendingsCount() constant returns(uint) {
+    return pendingsIndex.length;
+  }
+
+  function pendingById(uint _id) constant returns(bytes32) {
+    return pendingsIndex[_id];
+  }
+
+  function pendingYetNeeded(bytes32 _hash) constant returns(uint) {
+    return pendings[_hash].yetNeeded;
+  }
 
   // Revokes a prior confirmation of the given operation
   function revoke(bytes32 _operation) external {
