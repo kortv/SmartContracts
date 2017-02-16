@@ -15,8 +15,8 @@ function ContractsManager(address _es) {
     eternalStorage = _es; 
 }
 
-function addContract(uint _type, address addr) {
-
+function addContract(uint tp, address addr) returns(uint) {
+    return ContractsLibrary.setContract(eternalStorage, tp, addr);
 }
 
 function removeContract(uint _id) {
@@ -27,36 +27,35 @@ function getContract(uint _id) returns(address) {
 
 }
 
-function getTokenContract(string _symbol) returns(address) {
-
-}
-
 function getPlatformContract() returns(address) {
 
+}
+
+function getTokenContract(uint _id) returns(address) {
 
 }
 
-function getContacts(uint _type) returns(address[]) { 
-
+function getContacts(uint tp) returns(address[]) { 
+    return ContractsLibrary.getContracts(eternalStorage, tp);
 }
 
-  function claimContractOwnership(address _addr, string _type) onlyAuthorized() returns(bool) {
+  function claimContractOwnership(address _addr, string _tp) returns(bool) {
      if(Owned(_addr).claimContractOwnership()) {
        return true;
      }
      return false;
   }
 
-  function setExchangePrices(uint _id, uint _buyPrice, uint _sellPrice) onlyAuthorized() returns(bool) {
+  function setExchangePrices(uint _id, uint _buyPrice, uint _sellPrice) returns(bool) {
      return ExchangeInterface(getContract(_id)).setPrices(_buyPrice, _sellPrice);
   }
 
-  function reissueAsset(bytes32 _symbol, uint _value) onlyAuthorized() returns(bool) {
+  function reissueAsset(bytes32 _symbol, uint _value) returns(bool) {
         return ChronoBankPlatformInterface(getPlatformContract()).reissueAsset(_symbol, _value);
   }
 
-  function sendAsset(string _symbol, address _to, uint _value) onlyAuthorized() returns(bool) {
-     return ERC20Interface(getTokenContract(_symbol)).transfer(_to,_value);
+  function sendAsset(uint _id, address _to, uint _value) returns(bool) {
+     return ERC20Interface(getTokenContract(_id)).transfer(_to,_value);
   }
 
   //function getBalance(uint _id) constant returns(uint) {

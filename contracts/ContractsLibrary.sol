@@ -1,27 +1,49 @@
 pragma solidity ^0.4.8;
 
 import "./EternalStorage.sol";
-import "./EternalStorage.sol";
-import "./UserLibrary.sol";
+import "./SharedLibrary.sol";
 
 library ContractsLibrary {
 
-   function getTokenContractsIds(address db, address[] hashes) internal returns(uint[] result) {
-   //     uint j;
-   //     result = new uint[](addresses.length);
-   //     for (uint i = 0; i < addresses.length ; i++) {
-   //         result[i] = getLOCId(db, addresses[i]);
-   //     }
-   //     return result;
+    function getContractsCount(address db, uint tp) internal returns(uint) {
+        return EternalStorage(db).getUIntValue(sha3("contracts/count",tp));
     }
 
-   function getOtherContractsIds(address db, address[] hashes) internal returns(uint[] result) {
-   //     uint j;
-   //     result = new uint[](addresses.length);
-   //     for (uint i = 0; i < addresses.length ; i++) {
-   //         result[i] = getLOCId(db, addresses[i]);
-   //     }
-   //     return result;
+    function getContractId(address db, address contractAddress) internal returns(uint){
+        return EternalStorage(db).getUIntValue(sha3("contacts/ids", contractAddress));
+    }
+    
+    function getContractAddress(address db, uint contractId) internal returns(address){
+        return EternalStorage(db).getAddressValue(sha3("contracts/address", contractId));
+    }
+
+    function getContracts(address db, uint tp) internal returns(address[] result) {
+        uint j = getContractsCount(db,tp);
+        result = new address[](j);
+        for(uint i = 0; i < j; i++) {
+           result[i] = getContractAddress(db,i);
+        }
+        return result;
+    }
+
+    function setContract(address db,
+        uint tp,
+        address contractAddress
+    )
+        internal returns (uint)
+    {
+        uint contractId;
+        uint existingContractId = getContractId(db, contractAddress);
+        if (existingContractId > 0) {
+           contractId = existingContractId;
+        } else {
+            contractId = SharedLibrary.createNext(db, "contracts/count");
+            EternalStorage(db).setUIntValue(sha3("contracts/created-on", contractId), now);
+            EternalStorage(db).setUIntValue(sha3("contracts/ids", contractAddress), contractId);
+            EternalStorage(db).setAddressValue(sha3("contracts/contractAddress", contractId), contractAddress);
+        }
+        EternalStorage(db).setUIntValue(sha3("contracts/type", contractId), tp);
+        return contractId;
     }
 
 }

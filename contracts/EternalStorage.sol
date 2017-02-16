@@ -1,8 +1,8 @@
 pragma solidity ^0.4.8;
 
 import "./Owned.sol";
-import "./SafeMath.sol";
-import "./Strings.sol";
+import "./safeMath.sol";
+import "./strings.sol";
 
 
 contract EternalStorage is Owned {
@@ -16,7 +16,7 @@ contract EternalStorage is Owned {
       _;
     }
 
-    function EthlanceDB(){
+    function EternalStorage(){
 
     }
 
@@ -87,13 +87,13 @@ contract EternalStorage is Owned {
     function addUIntValue(bytes32 record, uint value)
     onlyAllowedContractOrOwner
     {
-        UIntStorage[record] = SafeMath.safeAdd(UIntStorage[record], value);
+        UIntStorage[record] = safeMath.safeAdd(UIntStorage[record], value);
     }
 
     function subUIntValue(bytes32 record, uint value)
     onlyAllowedContractOrOwner
     {
-        UIntStorage[record] = SafeMath.safeSub(UIntStorage[record], value);
+        UIntStorage[record] = safeMath.safeSub(UIntStorage[record], value);
     }
 
     function deleteUIntValue(bytes32 record)

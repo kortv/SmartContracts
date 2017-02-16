@@ -1,7 +1,6 @@
 pragma solidity ^0.4.8;
 
 import "./Shareable.sol";
-import "./UserLibrary.sol";
 
 contract Managed is Shareable {
 

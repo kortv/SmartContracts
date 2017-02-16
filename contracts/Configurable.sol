@@ -1,9 +1,8 @@
 pragma solidity ^0.4.8;
 
 import "./UserLibrary.sol";
-import "./Managed.sol";
 
-contract Configurable is Managed {
+contract Configurable {
   address public eternalStorage;
 
     function getSenderUserId() returns(uint) {

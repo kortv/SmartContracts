@@ -5,7 +5,7 @@ import "./SharedLibrary.sol";
 
 library UserLibrary {
 
-function getUserCount(address db) internal returns(uint) {
+    function getUserCount(address db) internal returns(uint) {
         return EternalStorage(db).getUIntValue(sha3("user/count"));
     }
 

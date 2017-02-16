@@ -20,11 +20,11 @@ contract ChronoMint {
   }
  
   function getTokenContracts(address[] addresses) constant returns(uint[]) {
-        return ContractsLibrary.getTokenContractsIds(eternalStorage, addresses);
+      //  return ContractsLibrary.getTokenContractsIds(eternalStorage, addresses);
   }
 
   function getOtherContracts(address[] addresses) constant returns(uint[]) {
-        return ContractsLibrary.getOtherContractsIds(eternalStorage, addresses);
+   //     return ContractsLibrary.getOtherContractsIds(eternalStorage, addresses);
   }
 
   function()
