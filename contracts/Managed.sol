@@ -6,7 +6,7 @@ import "./Shareable.sol";
 contract Managed is Configurable, Shareable {
 
   enum Operations {createLOC,editLOC,addLOC,removeLOC,editMint,changeReq}
-  mapping (bytes32 => Transaction) public txs;
+  mapping (bytes32 => Transaction) txs;
   mapping (uint => string) memberNames;
   uint public numAuthorizedKeys = 1;
   event userUpdate(address key);
