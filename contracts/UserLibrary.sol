@@ -22,10 +22,15 @@ library UserLibrary {
         return result;
     }
 
-    function getUserAddress(address db, uint userId) internal returns(address){
+    function getUserAddress(address db, uint userId) internal returns(address) {
         return EternalStorage(db).getAddressValue(sha3("user/address", userId));
     }
 
+    function getUserName(address db, uint userId) internal returns(string result) {
+        result = EternalStorage(db).getStringValue(sha3("user/name", userId));
+        return result;
+    }  
+ 
     function setUser(address db, address key, string name) internal returns (uint) {
         uint userId;
         uint existingUserId = getUserId(db, key);

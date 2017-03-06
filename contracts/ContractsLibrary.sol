@@ -40,7 +40,7 @@ library ContractsLibrary {
             contractId = SharedLibrary.createNext(db, "contracts/count");
             EternalStorage(db).setUIntValue(sha3("contracts/created-on", contractId), now);
             EternalStorage(db).setUIntValue(sha3("contracts/ids", contractAddress), contractId);
-            EternalStorage(db).setAddressValue(sha3("contracts/contractAddress", contractId), contractAddress);
+            EternalStorage(db).setAddressValue(sha3("contracts/address", contractId), contractAddress);
         }
         EternalStorage(db).setUIntValue(sha3("contracts/type", contractId), tp);
         return contractId;

@@ -15,7 +15,7 @@ function ContractsManager(address _es) {
     eternalStorage = _es; 
 }
 
-function addContract(uint tp, address addr) returns(uint) {
+function setContract(uint tp, address addr) returns(uint) {
     return ContractsLibrary.setContract(eternalStorage, tp, addr);
 }
 
@@ -24,7 +24,7 @@ function removeContract(uint _id) {
 }
 
 function getContract(uint _id) returns(address) {
-
+    return ContractsLibrary.getContractAddress(eternalStorage, _id);
 }
 
 function getPlatformContract() returns(address) {

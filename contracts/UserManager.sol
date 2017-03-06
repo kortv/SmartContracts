@@ -14,8 +14,14 @@ event userAdded(uint userId);
 event userUpdated(uint userId);
 event userRemoved(uint userId);
 
-function setUser(address key, string name) {
-   UserLibrary.setUser(eternalStorage, key, name);
+function setUser(address key, string name) returns (uint) {
+   return UserLibrary.setUser(eternalStorage, key, name);
 }
+
+function getUser(uint _id) returns (address, string) {
+   address addr = UserLibrary.getUserAddress(eternalStorage, _id);
+   string name = UserLibrary.getUserName(eternalStorage, _id);
+   return (addr,name);
+} 
 
 }
