@@ -18,10 +18,10 @@ function setUser(address key, string name) returns (uint) {
    return UserLibrary.setUser(eternalStorage, key, name);
 }
 
-function getUser(uint _id) returns (address, string) {
-   address addr = UserLibrary.getUserAddress(eternalStorage, _id);
-   string name = UserLibrary.getUserName(eternalStorage, _id);
-   return (addr,name);
+function getUser(uint _id) returns (address result, string result2) {
+   result = UserLibrary.getUserAddress(eternalStorage, _id);
+   result2 = UserLibrary.getUserName(eternalStorage, _id);
+   return (result,result2);
 } 
 
 }

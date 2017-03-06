@@ -104,8 +104,10 @@ contract EternalStorage is Owned {
 
     mapping(bytes32 => string) StringStorage;
 
-    function getStringValue(bytes32 record) constant returns (string){
-        return StringStorage[record];
+    function getStringValue(bytes32 record) constant returns (string strs){
+        strs = strs.toSlice().concat(StringStorage[record].toSlice());
+        //return StringStorage[record];
+        return strs;
     }
 
     function setStringValue(bytes32 record, string value)
