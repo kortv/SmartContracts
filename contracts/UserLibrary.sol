@@ -26,8 +26,9 @@ library UserLibrary {
         return EternalStorage(db).getAddressValue(sha3("user/address", userId));
     }
    
-    function getUserNameHash(address db, uint userId) internal returns(bytes32) {
-        return sha3("user/name", userId);
+    function getUserName(address db, uint userId) internal returns(bytes32[] result) {
+        result = EternalStorage(db).getStringValue(sha3("user/name", userId));
+        return result;
     }
 
     function setUser(address db, address key, string name) internal returns (uint) {

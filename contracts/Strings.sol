@@ -41,6 +41,49 @@ library Strings {
         uint _ptr;
     }
 
+    function toBytes32Array(string self) internal returns (bytes32[] result) {
+      bytes memory bt = bytes(self);
+      uint slices = bt.length / 32;
+      uint slice = 0;
+      uint bc = 0;
+      bytes memory bs = new bytes(32);
+      result = new bytes32[](slices);
+      for(uint i = 0; i < bt.length; i++) {
+        bs[bc++] = bt[i];
+        if(bc == 31)
+        {
+          bc = 0;
+          result[slice++] = stringToBytes32(string(bs));
+        }
+      }
+      return result;
+    }
+  
+    function stringToBytes32(string memory source) returns (bytes32 result) {
+    assembly {
+        result := mload(add(source, 32))
+    }
+    }
+
+    function fromBytes32Array(bytes32[] self) internal returns (string) {
+       bytes memory bytesString = new bytes(self.length * 32);
+        uint urlLength;
+        for (uint i=0; i<self.length; i++) {
+            for (uint j=0; j<32; j++) {
+                byte char = byte(bytes32(uint(self[i]) * 2 ** (8 * j)));
+                if (char != 0) {
+                    bytesString[urlLength] = char;
+                    urlLength += 1;
+                }
+            }
+        }
+        bytes memory bytesStringTrimmed = new bytes(urlLength);
+        for (i=0; i<urlLength; i++) {
+            bytesStringTrimmed[i] = bytesString[i];
+        }
+        return string(bytesStringTrimmed);
+    }
+
     function memcpy(uint dest, uint src, uint len) private {
         // Copy word-length chunks while possible
         for(; len >= 32; len -= 32) {

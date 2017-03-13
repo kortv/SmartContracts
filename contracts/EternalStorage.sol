@@ -102,16 +102,16 @@ contract EternalStorage is Owned {
       delete UIntStorage[record];
     }
 
-    mapping(bytes32 => string) StringStorage;
+    mapping(bytes32 => bytes32[]) StringStorage;
 
-    function getStringValue(bytes32 record) constant returns (string){
+    function getStringValue(bytes32 record) constant returns (bytes32[]) {
         return StringStorage[record];
     }
 
     function setStringValue(bytes32 record, string value)
     onlyAllowedContractOrOwner
     {
-        StringStorage[record] = value;
+        StringStorage[record] = value.toBytes32Array();
     }
 
     function deleteStringValue(bytes32 record)
@@ -285,7 +285,7 @@ contract EternalStorage is Owned {
             for (uint j = 0; j < types.length; j++) {
                 uint r_i = (i * types.length) + j;
                 if (types[j] == 7) {
-                    strs = strs.toSlice().concat(getStringValue(records[r_i]).toSlice());
+                    //strs = strs.toSlice().concat(getStringValue(records[r_i]).toSlice());
                     strs = strs.toSlice().concat("99--DELIMITER--11".toSlice());
                 } else {
                     items[k] = getUIntValueConverted(records[r_i], types[j]);
