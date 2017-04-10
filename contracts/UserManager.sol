@@ -4,6 +4,7 @@ import "./Managed.sol";
 
 contract UserManager is Managed {
     event cbeUpdate(address key);
+    event setReq(uint required);
 
     function init(address _userStorage, address _shareable) returns (bool) {
         if (userStorage != 0x0) {
